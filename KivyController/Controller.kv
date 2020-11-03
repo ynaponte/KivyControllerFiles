@@ -1,0 +1,377 @@
+#: import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+<Gerenciador>:
+
+    transition: FadeTransition()
+    ConfigPage:
+    PrincipalPage:
+
+<PrincipalPage>:
+
+    name: "dois"
+
+    PrincipalWidget:
+
+
+<ConfigPage>:
+
+    name: "um"
+
+    ConfigWidget:
+
+
+<IteractiveImage>:
+
+    Image:
+        source: "maquete.jpeg"
+        pos: root.pos
+        size: root.size
+        stretch: True
+
+    Led:
+        id: chuv
+        pos_hint: {"x": .07, "y": .88}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: lamp1
+        pos_hint: {"x": .338, "y": .89}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: geladeira
+        pos_hint: {"x": .455, "y": .871}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: lamp2
+        pos_hint: {"x": .69, "y": .873}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: tv1
+        pos_hint: {"x": .84, "y": .625}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: lamp3
+        pos_hint: {"x": .089, "y": .476}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: lamp4
+        pos_hint: {"x": .28, "y": .19}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: lamp5
+        pos_hint: {"x": .402, "y": .21}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: lamp6
+        pos_hint: {"x": .704, "y": .198}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: tv2
+        pos_hint: {"x": .888, "y": .216}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: ar1
+        pos_hint: {"x": .261, "y": .08}
+        size_hint: 0.055, 0.055
+
+    Led:
+        id: ar2
+        pos_hint: {"x": .637, "y": .13}
+        size_hint: 0.055, 0.055
+
+
+<PrincipalWidget>:
+
+    consumo: con
+    arcond: arcond
+    tv: tv
+    lampada: lampada
+    gelad: geladeira
+    chuv: chuveiro
+
+    tempo: sim_size
+
+    # Gerenciador de consumo
+    canvas:
+        Color:
+            rgba: 0.3, 0.3, 0.3, 1
+        Rectangle:
+            size: root.width, root.height
+            pos: 0,0
+
+        Color:
+            rgba: 0.1, 0.1, 0.1, 0.5
+        RoundedRectangle:
+            size: 8, root.height * 2 / 3
+            pos: root.width/3-4, root.height/3 + 4
+            radius: [4, 4, 0, 0]
+
+        RoundedRectangle:
+            size: root.width, 8
+            pos: 0, root.height/3-4
+            radius: [4]
+
+    MaqueteIterativa:
+        pos: root.width/6-self.width/2, root.height*2/3-self.height/2
+        size: root.height/2, root.height/2
+
+    FloatLayout:
+        pos: root.width/3+4, root.height/3+4
+        size: root.width*2/3, root.height*2/3
+
+        canvas.before:
+            Color:
+                rgba: 0.8,0.8,0.8,1
+
+            Rectangle:
+                size:self.size
+                pos: self.pos
+
+        Label:
+            text: "Consumo(KWh):"
+            color: 0,0,0,1
+            font_size: 36
+            pos: self.width/2, self.height*0.85
+
+        Label:
+            id: con
+            color: 0,0,0,1
+            text: "0.0"
+            pos: self.width/2, self.height/2
+            font_size: self.width/5
+
+    # Painel de controle
+    FloatLayout:
+        size: root.width, root.height/3-4
+        pos: 0,0
+
+        RoundedBtn:
+            text: "Iniciar"
+            bold: True
+            size_hint_x: 0.1
+            size_hint_y: None
+            pos_hint: {"top": 0.95, "right": 0.99}
+            on_press: root.start_sim()
+
+        RoundedBtn:
+            text: "Parar"
+            bold: True
+            size_hint: (0.1, None)
+            back_rgb: [0.7578, 0.2, 0.2]
+            pos_hint: {"top": 0.7, "right": 0.99}
+            on_press: root.stop_sim()
+
+        # Botões de fácil acesso
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.3, 0.4
+            pos_hint: {"x": 0.015, "y": 0.3}
+            spacing: 20
+
+            Label:
+                text: "Controle rapido"
+                font_size: 28
+                pos: 200, 0
+
+            BoxLayout:
+
+                orientation: "horizontal"
+                spacing: 5
+
+                RoundedBtn:
+                    text: "A"
+                    bold: True
+                    back_rgb: [0.367, 1, 0]
+                    border_radius: [self.height/2, 5, 5, self.height/2]
+                    on_press: root.update_text_box("A")
+
+                RoundedBtn:
+                    text: "B"
+                    bold: True
+                    color: 0,0,0,1
+                    back_rgb: [0.9, 0.926, 0.2]
+                    border_radius: [5]
+                    on_press: root.update_text_box("B")
+
+
+                RoundedBtn:
+                    text: "C"
+                    bold: True
+                    back_rgb: [0.9, 0, 0]
+                    border_radius: [5, self.height/2, self.height/2, 5]
+                    on_press: root.update_text_box("C")
+
+        # Controle de tempo da simulacao
+
+        GridLayout:
+            cols: 2
+            size_hint: 0.2, 0.1
+            center_x: self.width/2
+            pos_hint: {"x": 0.68, "y": 0.2}
+            spacing: 10
+
+            TextInput:
+
+                text: "1"
+                id: sim_size
+                multiline: False
+                size_hint: 0.4, None
+                height: 30
+
+            Label:
+
+                text: "minutos\npara uma hora"
+                size_hint: 0.5, None
+                height: 30
+
+
+        # Controles
+        GridLayout:
+            cols: 4
+            size_hint: 0.3, 0.4
+            pos_hint: {"x": 0.35, "y": 0.4}
+            spacing: self.height/5
+
+
+            Label:
+                text: "Geladeira: "
+                size_hint_y: None
+                height: 30
+
+            TextInput:
+                id: geladeira
+                multiline: False
+                size_hint_y: None
+                height: 30
+
+
+            Label:
+                text: "Chuveiro: "
+                size_hint_y: None
+                height: 30
+
+            TextInput:
+                id: chuveiro
+                size_hint_y: None
+                multiline: False
+                height: 30
+
+
+            Label:
+                text: "Lampada: "
+                size_hint_y: None
+                height: 30
+
+            TextInput:
+                id: lampada
+                multiline: False
+                size_hint_y: None
+                height: 30
+
+
+            Label:
+                text: "Ar-cond.: "
+                size_hint_y: None
+                height: 30
+
+            TextInput:
+                id: arcond
+                multiline: False
+                size_hint_y: None
+                height: 30
+
+
+            Label:
+                text: "Telev.: "
+                size_hint_y: None
+                height: 30
+
+            TextInput:
+                id: tv
+                multiline: False
+                size_hint_y: None
+                height: 30
+
+
+<ConfigWidget>:
+    error_msg: error_msg
+    comm_input: comm_input
+
+    canvas:
+        Color:
+            rgba: 0.3, 0.3, 0.3, 1
+        Rectangle:
+            size: root.width, root.height
+            pos: 0,0
+
+    BoxLayout:  # Gráficos do widget da página de configuração
+        pos: (root.width-self.width)/2, (root.height-self.height)/2
+        orientation: "vertical"
+        spacing: 15
+
+        Label:
+            text: "Digite a porta do Arduino"
+            font_size: 15
+
+        TextInput:
+            id: comm_input
+            multiline: False
+            size_hint_y: None
+            height: 30
+
+        RoundedBtn:
+            back_rgb: [0.7, 0.7, 0.7]
+            size_hint_y: None
+            bold: True
+            border_radius: [self.height/2]
+            text: "Aplicar"
+            on_release:
+                root.analyser()
+                if root.possivel == 1: app.root.current = "dois"
+
+    Label:
+        id: error_msg
+        text: ""
+        color: 1, 0, 0, 1
+        pos: (root.width-self.width)/2, root.height/5
+
+<RoundedBtn@ButtonBehavior+Label>:
+    back_rgb: [0, 0.89, 1]
+    size: 100, 36
+    border_radius: [18]
+
+    canvas.before:
+        Color:
+            rgb: self.back_rgb
+            a: 1 if self.state == "normal" else 0.5
+
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: self.border_radius
+
+
+<Led@Widget>:
+    size: 50, 50
+
+    basecolor: [0, 0, 0, 1]
+
+    canvas:
+        Color:
+
+            rgba: self.basecolor
+
+        RoundedRectangle:
+
+            size: self.size
+            radius: [self.width/2]
+            pos: self.pos
